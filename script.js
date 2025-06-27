@@ -4,28 +4,38 @@ document.getElementById('grievance-form').addEventListener('submit', function(e)
   const issue = document.getElementById('issue').value;
   const suggestion = document.getElementById('suggestion').value;
 
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw-mDswi2Ddo3mzNtey8PF9fym_xC4A2-p8wyqCxyPQT2Irl8ikhJSknueoYfXMOiJL/exec';
+  const FORMSPREE_URL = 'https://formspree.io/f/mdkzyoen';
 
-  fetch(`${SHEET_URL}?issue=${encodeURIComponent(issue)}&suggestion=${encodeURIComponent(suggestion)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.result === 'success') {
-        document.getElementById('form-section').classList.add('hidden');
-        document.getElementById('thank-you').classList.remove('hidden');
-
-        // Show floating hearts
-        for (let i = 0; i < 6; i++) {
-          setTimeout(() => {
-            createHeart();
-          }, i * 300);
-        }
-      } else {
-        alert('Oops! Something went wrong.');
-      }
+  fetch(FORMSPREE_URL, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      issue,
+      suggestion
     })
-    .catch(() => {
-      alert('Error submitting grievance.');
-    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok || data.success !== false) {
+      document.getElementById('form-section').classList.add('hidden');
+      document.getElementById('thank-you').classList.remove('hidden');
+
+      // Floating hearts animation
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+          createHeart();
+        }, i * 300);
+      }
+    } else {
+      alert("Couldn't submit grievance 😥");
+    }
+  })
+  .catch(() => {
+    alert("Form submission failed 😢");
+  });
 });
 
 document.getElementById('new-grievance').addEventListener('click', () => {
