@@ -47,7 +47,7 @@ document.getElementById('new-grievance').addEventListener('click', () => {
 function createHeart() {
   const heart = document.createElement('div');
   heart.classList.add('heart');
-  heart.textContent = '💖';
+  heart.textContent = '✨';
   heart.style.left = Math.random() * 100 + 'vw';
   heart.style.top = Math.random() * 50 + 50 + 'vh';
   document.body.appendChild(heart);
